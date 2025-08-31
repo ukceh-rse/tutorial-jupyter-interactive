@@ -1,0 +1,63 @@
+---
+title: Interactive content with Jupyter and ipywidgets
+author: Joe Marsh Rossney
+date: 2025-08-29
+abstract: |
+  This tutorial demonstrates how to create interactive plots and other content in Jupyter notebooks.
+  This is especially useful for workshops.
+
+format:
+  html:
+    embed-resources: true
+
+code-links: binder
+---
+
+Note that all the labels, captions etc are wrong. Just testing if binder works..
+
+```{python}
+import ipywidgets
+from matplotlib import pyplot as plt
+import numpy as np
+```
+
+```{python}
+%matplotlib widget
+
+#%matplotlib notebook
+```
+
+```{python}
+fig, ax = plt.subplots()
+
+def update(x_pos: int):
+    x = np.linspace(-4,4, num=1000)
+    y = (x**2) - x 
+    dydx = (2 * x) - 1
+
+    # Clear previous lines and points
+    plt.cla()
+
+    ax.axvline(0, linestyle=":", color="k", alpha=.3)
+    ax.axhline(0, linestyle=":", color="k", alpha=.3)
+    ax.plot(x, y, label=r"$y=x^2-1$")
+    ax.plot(x+x[x_pos],(dydx[x_pos]*x)+y[x_pos], label=r"$dy/dx$")
+    ax.scatter(x[x_pos],y[x_pos], label=f"$x={x_pos}$" + "\n" + f"$dy/dx={dydx[x_pos]:.3f}$")
+
+    ax.set_title('Derivative (interactive) of y=f(x)=x${^2}$-1')
+    ax.legend(loc="upper center")
+
+    # Reset the limits unless you're happy for it to auto-adjust
+    # (in which case put them outside this function under fig, ax = plt.subplots()
+    ax.set_ylim(-2, 8)
+    ax.set_xlim(-4, 4)
+```
+
+:::{.callout-note}
+
+[quarto-dev/quarto-cli/#6496](https://github.com/quarto-dev/quarto-cli/discussions/6496)
+:::
+
+```{python}
+ipywidgets.interact(update, x_pos=(312, 812))
+```
