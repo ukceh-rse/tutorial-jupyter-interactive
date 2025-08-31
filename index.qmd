@@ -10,6 +10,8 @@ format:
   html:
     embed-resources: true
 
+jupyter: python3
+
 code-links: binder
 ---
 
